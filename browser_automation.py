@@ -1,7 +1,7 @@
 from pyppeteer import launch
 import asyncio
 
-# url for getting the list of IPOs listed on NSE in 2022git 
+# url for getting the list of IPOs listed on NSE in 2022
 url = 'https://www1.nseindia.com/products/content/equities/ipos/hist_ipo.htm'
 
 async def url_content(url):
