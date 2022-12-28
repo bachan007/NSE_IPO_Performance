@@ -1,3 +1,5 @@
+# Run the script seperately to store the latest data locally or call it to other files
+ 
 from bs4 import BeautifulSoup
 import pandas as pd
 from browser_automation import page_source
@@ -7,6 +9,8 @@ import os
 
 def store_updated_IPO_data(page_source):
     '''
+    This function takes the latest data from NSE website, process it to get the desired format 
+    and saves data locally.
     '''
     # Parsing the page source
     soup = BeautifulSoup(page_source,'html.parser')
@@ -34,6 +38,8 @@ def store_updated_IPO_data(page_source):
         ipo_df.to_csv(f'IPO_file/ipo_data.csv')
 
     print(f"IPOs data updated on {datetime.datetime.now()}")
+    return ipo_df
+
 
 if __name__=='__main__':
     store_updated_IPO_data(page_source)

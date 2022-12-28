@@ -1,11 +1,18 @@
+'''
+In this script the various operations are performed to get the information about the various IPOs.
+The information collected is stored into a seperate dataframe and exported to excel file.
+'''
+
 import pandas as pd
 import numpy as np
 import os
 from datetime import datetime as dt
 import yfinance as yf
 
-# reading the equity file which contains the nse listed companies info
+
+# reading the equity file which contains the nse listed companies info.
 equity_df = pd.read_csv(os.path.join(os.path.abspath(os.getcwd()),'input_files/EQUITY_L.csv'))
+
 
 # cleaning the column names 
 def clean_columns(columns):
@@ -16,10 +23,11 @@ equity_df.columns = cleaned_cols
 equity_df['NAME OF COMPANY'] = equity_df['NAME OF COMPANY'].apply(lambda x : x.title().strip())
 equity_df['SYMBOL'] = equity_df['SYMBOL'].apply(lambda x : x.upper().strip())
 
+
 def get_symbol(company_name):
     '''
     This function checks whether the company name is present in stocks list provided by NSEINDIA
-    or not. If the name is correct and present int he list, then it return the symbol or ticker 
+    or not. If the name is correct and present in the list, then it return the symbol or ticker 
     of the company.
     I will recommend to download the updated list from when you extract the updated IPO list :
     https://www1.nseindia.com/content/equities/EQUITY_L.csv
@@ -36,6 +44,11 @@ def get_symbol(company_name):
 
 # reading the ipo list file 
 ipo_df = pd.read_csv(os.path.join(os.path.abspath(os.getcwd()),'IPO_file/ipo_data.csv'),index_col=0)
+# also you can get the latest updated file directly
+# from browser_automation import page_source
+# from data_extraction import store_updated_IPO_data
+# ipo_df = store_updated_IPO_data(page_source)
+
 
 # assigning the company symbol to the IPOs
 for comp in ipo_df['Name of the issue'].to_list():
@@ -43,7 +56,10 @@ for comp in ipo_df['Name of the issue'].to_list():
 
 
 def stock_info(df,symbol,index_symbol='NS'):
-    # desired information list --> can be updated according to the requirements
+    '''
+    This functions calls the yfinance API and gives the information about the stock.
+    desired information list --> can be updated according to the requirements
+    '''
     info_list = ['currentPrice','fiftyTwoWeekHigh','fiftyTwoWeekLow','dayHigh','dayLow','sector','website','industry']
     company = yf.Ticker(f'{symbol}.{index_symbol}')
     company_info = company.info
@@ -52,6 +68,9 @@ def stock_info(df,symbol,index_symbol='NS'):
 
 
 def stock_price_action(symbol,index_symbol='NS'):
+    '''
+    This function returns the updated information dataframe about the stocks and prints some analysis on console.
+    '''
     ticker = f'{symbol}.{index_symbol}'
     data = yf.download(ticker)
     data.reset_index(inplace=True)
@@ -80,7 +99,9 @@ def stock_price_action(symbol,index_symbol='NS'):
 
 
 def IPOs_data(save=False):
-    
+    '''
+    make save=True for saving the all updated data into a single sheet locally.
+    '''
     for symbol in ipo_df['symbol'].to_list():
         stock_price_action(symbol)
     while save:
@@ -88,8 +109,6 @@ def IPOs_data(save=False):
         save=False
 
     return ipo_df
-
-
 
 
 
