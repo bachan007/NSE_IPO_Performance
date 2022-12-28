@@ -43,11 +43,11 @@ def get_symbol(company_name):
         return None
 
 # reading the ipo list file 
-ipo_df = pd.read_csv(os.path.join(os.path.abspath(os.getcwd()),'IPO_file/ipo_data.csv'),index_col=0)
+# ipo_df = pd.read_csv(os.path.join(os.path.abspath(os.getcwd()),'IPO_file/ipo_data.csv'),index_col=0)
 # also you can get the latest updated file directly
-# from browser_automation import page_source
-# from data_extraction import store_updated_IPO_data
-# ipo_df = store_updated_IPO_data(page_source)
+from browser_automation import page_source
+from data_extraction import store_updated_IPO_data
+ipo_df = store_updated_IPO_data(page_source)
 
 
 # assigning the company symbol to the IPOs

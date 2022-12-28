@@ -12,8 +12,8 @@ from plots import donut_chart, line_graph
 pd.set_option('display.max_columns',None)
 
 # Uncomment below line for latest data and comment the next line
-# ipo_df = IPOs_data(save=True)
-ipo_df = pd.read_excel('temp_ipo_output.xlsx')
+ipo_df = IPOs_data(save=True)
+# ipo_df = pd.read_excel('temp_ipo_output.xlsx')
 
 def listing_gain_or_loss(row):
     '''
