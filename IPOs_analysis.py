@@ -43,11 +43,11 @@ def get_symbol(company_name):
         return None
 
 # reading the ipo list file 
-# ipo_df = pd.read_csv(os.path.join(os.path.abspath(os.getcwd()),'IPO_file/ipo_data.csv'),index_col=0)
+ipo_df = pd.read_csv(os.path.join(os.path.abspath(os.getcwd()),'IPO_file/ipo_data.csv'),index_col=0)
 # also you can get the latest updated file directly
-from browser_automation import page_source
-from data_extraction import store_updated_IPO_data
-ipo_df = store_updated_IPO_data(page_source)
+# from browser_automation import page_source
+# from data_extraction import store_updated_IPO_data
+# ipo_df = store_updated_IPO_data(page_source)
 
 
 # assigning the company symbol to the IPOs
@@ -96,19 +96,22 @@ def stock_price_action(symbol,index_symbol='NS'):
     ['max_on','min_on','max_high','max_low','listing price']
     ]=max_on,min_on,max_price,min_price,opening_price
     print(analysis)
+    return analysis
 
 
 def IPOs_data(save=False):
     '''
     make save=True for saving the all updated data into a single sheet locally.
     '''
+    analysis_list = []
     for symbol in ipo_df['symbol'].to_list():
-        stock_price_action(symbol)
+        analysis = stock_price_action(symbol)
+        analysis_list.append(analysis)
     while save:
         ipo_df.to_excel('temp_ipo_output.xlsx',index=False)
         save=False
 
-    return ipo_df
+    return ipo_df,analysis_list
 
 
 

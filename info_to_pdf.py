@@ -6,7 +6,7 @@ from fpdf import FPDF
 import os
 import yfinance as yf
 import datetime as dt
-from IPO_stock_performance import adj_price_analysis,list_top,grouping
+from IPO_stock_performance import adj_price_analysis,list_top,grouping,analysis
 
 
 # Margin
@@ -91,7 +91,7 @@ def info_to_pdf():
         for ele in range(len(df)):
             text1 = f"{df.loc[ele,'Name of the issue']}"
             text2 = f"listed on {df.loc[ele,'Date ofListing']} at {df.loc[ele,'listing price']} currently trading at {df.loc[ele,'LTP']} with the gain of {df.loc[ele,'current_gain_percentage']}% from the date of listing."
-            pdf.set_font('Arial', 'B', 7)
+            pdf.set_font('Arial', 'B', 8)
             pdf.cell(w=5, h=4, txt=text1,ln=1)
             pdf.cell(w=5, h=4, txt=text2,ln=2)
             pdf.ln(ch)
@@ -109,19 +109,33 @@ def info_to_pdf():
         dc = grouping(group,output_col)
         for key,val in dc.items():
             text = f"{key} : {len(val)}"
-            pdf.set_font('Arial', 'B', 8)
+            pdf.set_font('Arial', 'B', 10)
             pdf.cell(w=5, h=4, txt=text,ln=1)
             pdf.ln(ch-5)
             for ele in val:
-                pdf.set_font('Arial', 'B', 6)
+                pdf.set_font('Arial', 'B', 8)
                 pdf.cell(w=10, h=4, txt=ele,ln=1)
             pdf.ln(ch)
 
+    def each_stock_brief():
+        '''
+        This function returns the brief analysis of every stock
+        '''
+        pdf.add_page()
+        pdf.set_font('Arial', 'B', 20)
+        pdf.cell(w=0, h=20, txt="Brief Analysis of All IPOs", ln=1,align='C')
+        for val in analysis:
+            pdf.set_font('Arial', 'B', 10)
+            pdf.multi_cell(w=0,h=5,txt=val)
+
+    # calling the above created functions        
     groupwise_analysis('sector','Name of the issue')
     groupwise_analysis('industry','Name of the issue')
     performing_stocks(winners,performance='Best Performing')
     performing_stocks(loosers,'Worst Performing')
+    each_stock_brief()
 
+    # Storing the pdf file
     directory='PDFs'
     if not os.path.exists(directory):
         os.makedirs(directory)
